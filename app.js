@@ -16,3 +16,8 @@ mongoose.connect(
   },
   (e) => console.log("DB error", e),
 );
+
+const routes = require("./routes");
+
+app.use(express.json());
+app.use(routes);
