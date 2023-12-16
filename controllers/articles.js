@@ -23,6 +23,7 @@ const addArticle = (req, res, next) => {
 
 const removeArticle = (req, res, next) => {
   const { articleId } = req.params;
+  const { userId } = req.user._id;
 
   Article.findByIdAndRemove(articleId)
     .orFail(() => new NotFoundError("Error from removeArticle"))

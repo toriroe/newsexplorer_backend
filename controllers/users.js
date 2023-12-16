@@ -22,7 +22,7 @@ const createUser = (req, res, next) => {
             User.create({ name, email, password: hash })
               .then((user) => {
                 const token = jwt.sign({ _id: user.id }, JWT_SECRET, {
-                  expireIn: "7d",
+                  expiresIn: "7d",
                 });
                 res.status(201).send({ name, email, _id: user._id, token });
               })
