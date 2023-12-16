@@ -2,6 +2,7 @@ const Article = require("../models/article");
 
 const NotFoundError = require("../errors/not-found");
 const BadRequestError = require("../errors/bad-request");
+const ForbiddenError = require("../errors/forbidden");
 
 const addArticle = (req, res, next) => {
   const owner = req.user._id;
@@ -25,9 +26,17 @@ const removeArticle = (req, res, next) => {
   const { articleId } = req.params;
   const { userId } = req.user._id;
 
-  Article.findByIdAndRemove(articleId)
+  Article.findById(articleId)
     .orFail(() => new NotFoundError("Error from removeArticle"))
-    .then((removedArticle) => res.send(removedArticle))
+    .then((article) => {
+      if (userId !== article.owner.toString()) {
+        throw new ForbiddenError("User not authorized to remove article");
+      }
+      return Article.findByIdAndRemove(articleId)
+        .orFail(() => new NotFoundError("Error from removeArticle"))
+        .then((removedArticle) => res.send(removedArticle))
+        .catch(next);
+    })
     .catch(next);
 };
 
