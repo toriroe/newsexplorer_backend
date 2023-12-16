@@ -2,12 +2,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-const { JWT_SECRET = "SECRET_KEY" } = process.env;
-
 const NotFoundError = require("../errors/not-found");
 const ConflictError = require("../errors/conflict");
 const UnauthorizedError = require("../errors/unauthorized");
 const BadRequestError = require("../errors/bad-request");
+
+const { JWT_SECRET, NODE_ENV } = process.env;
 
 const createUser = (req, res, next) => {
   const { email, name, password } = req.body;
@@ -21,9 +21,13 @@ const createUser = (req, res, next) => {
           .then((hash) => {
             User.create({ name, email, password: hash })
               .then((user) => {
-                const token = jwt.sign({ _id: user.id }, JWT_SECRET, {
-                  expiresIn: "7d",
-                });
+                const token = jwt.sign(
+                  { _id: user.id },
+                  NODE_ENV === "production" ? JWT_SECRET : "SECRET_KEY",
+                  {
+                    expiresIn: "7d",
+                  },
+                );
                 res.status(201).send({ name, email, _id: user._id, token });
               })
               .catch((err) => {
@@ -47,7 +51,11 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user.id }, JWT_SECRET, { expiresIn: "7d" });
+      const token = jwt.sign(
+        { _id: user.id },
+        NODE_ENV === "production" ? JWT_SECRET : "SECRET_KEY",
+        { expiresIn: "7d" },
+      );
       res.send({ name: user.name, email, _id: user.id, token });
     })
     .catch((err) => {
