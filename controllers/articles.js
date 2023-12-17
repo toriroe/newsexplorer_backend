@@ -1,8 +1,8 @@
 const Article = require("../models/article");
 
-const NotFoundError = require("../errors/not-found");
-const BadRequestError = require("../errors/bad-request");
-const ForbiddenError = require("../errors/forbidden");
+const NotFoundError = require("../utils/errors/not-found");
+const BadRequestError = require("../utils/errors/bad-request");
+const ForbiddenError = require("../utils/errors/forbidden");
 
 const addArticle = (req, res, next) => {
   const owner = req.user._id;
@@ -24,9 +24,10 @@ const addArticle = (req, res, next) => {
 
 const removeArticle = (req, res, next) => {
   const { articleId } = req.params;
-  const { userId } = req.user._id;
+  const userId = req.user._id;
 
   Article.findById(articleId)
+    .select("+owner")
     .orFail(() => new NotFoundError("Error from removeArticle"))
     .then((article) => {
       if (userId !== article.owner.toString()) {
@@ -41,7 +42,7 @@ const removeArticle = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  Article.find({})
+  Article.find({ owner: req.user._id })
     .then((articles) => res.send(articles))
     .catch(next);
 };

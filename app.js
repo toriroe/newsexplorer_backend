@@ -6,9 +6,10 @@ const { default: mongoose } = require("mongoose");
 const helmet = require("helmet");
 
 const app = express();
-const { PORT = 3001 } = process.env;
+const { PORT = 3001, NODE_ENV, DB_ADDRESS } = process.env;
 const cors = require("cors");
 const { errors } = require("celebrate");
+const { DB_ADDRESS_DEV } = require("./utils/constants");
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { limiter } = require("./utils/limiter");
@@ -19,13 +20,23 @@ app.listen(PORT, () => {
 
 // http://localhost:3001/
 
-mongoose.connect(
-  "mongodb://127.0.0.1:27017/news_explorer",
-  (r) => {
-    console.log("connected to DB", r);
-  },
-  (e) => console.log("DB error", e),
-);
+if (NODE_ENV === "production") {
+  mongoose.connect(
+    DB_ADDRESS,
+    (r) => {
+      console.log("connected to DB", r);
+    },
+    (e) => console.log("DB error", e),
+  );
+} else {
+  mongoose.connect(
+    DB_ADDRESS_DEV,
+    (r) => {
+      console.log("connected to DB", r);
+    },
+    (e) => console.log("DB error", e),
+  );
+}
 
 const routes = require("./routes");
 

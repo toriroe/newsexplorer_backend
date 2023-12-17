@@ -4,7 +4,7 @@ const validator = require("validator");
 // validate user and news article IDs when they are accessed
 const validateId = celebrate({
   params: Joi.object().keys({
-    itemId: Joi.string().hex().length(24),
+    articleId: Joi.string().hex().length(24),
   }),
 });
 

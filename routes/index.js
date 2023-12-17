@@ -7,7 +7,7 @@ const {
   validateUserInfoBody,
   validateLoginAuthentication,
 } = require("../middlewares/validation");
-const NotFoundError = require("../errors/not-found");
+const NotFoundError = require("../utils/errors/not-found");
 
 router.use("/users", userRouter);
 router.use("/articles", articleRouter);
