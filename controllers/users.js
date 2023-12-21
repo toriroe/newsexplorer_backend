@@ -24,7 +24,7 @@ const createUser = (req, res, next) => {
               .then((user) => {
                 const token = jwt.sign(
                   { _id: user.id },
-                  NODE_ENV === "production" ? JWT_SECRET : SECRET_KEY,
+                  NODE_ENV === "production" ? JWT_SECRET : "secret-key-2023",
                   {
                     expiresIn: "7d",
                   },
@@ -54,7 +54,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user.id },
-        NODE_ENV === "production" ? JWT_SECRET : SECRET_KEY,
+        NODE_ENV === "production" ? JWT_SECRET : "secret-key-2023",
         { expiresIn: "7d" },
       );
       res.send({ name: user.name, email, _id: user.id, token });
