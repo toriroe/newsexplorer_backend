@@ -16,6 +16,7 @@ module.exports.handleAuthorization = (req, res, next) => {
   let payload;
 
   try {
+    console.log(NODE_ENV === "production" ? JWT_SECRET : "secret-key-2023");
     payload = jwt.verify(
       token,
       NODE_ENV === "production" ? JWT_SECRET : "secret-key-2023",
