@@ -1,6 +1,6 @@
 # News Explorer Back End
 
-This project is the back for the "News Explorer" React app project. It's an API that is responsible for routing HTTP requests that interact with a database in order to register new users, login, and get, add, and remove articles from the saved news articles page.
+This project is the back for the ["News Explorer" React app project](https://github.com/toriroe/newsexplorer_frontend). It's an API that is responsible for routing HTTP requests that interact with a database in order to register new users, login, and get, add, and remove articles from the saved news articles page.
 
 Authorization middleware is implemented for verifying tokens upon returning to the site after previously being logged in. Middelware for centralized error handling and logging is also used. Incoming data is validated using the Joi library.
 
