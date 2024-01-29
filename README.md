@@ -15,4 +15,4 @@ It is currently being deployed and hosted on Google Cloud. Site is encrypted wit
 
 ## Links
 
-- [Link to site](https://api.newsexplorer.mnode.net)
+[Link to site](https://api.newsexplorer.mnode.net)
